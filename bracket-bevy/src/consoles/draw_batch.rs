@@ -2,6 +2,7 @@ use super::TextAlign;
 use bracket_color::prelude::{ColorPair, RGBA};
 use bracket_geometry::prelude::{Point, Rect};
 
+#[derive(Debug)]
 pub struct DrawBatch {
     pub(crate) batch: Vec<(u32, DrawCommand)>,
     pub(crate) z_count: u32,
@@ -666,7 +667,7 @@ impl DrawBatch {
 
 /// Represents a buffered drawing command that can be asynchronously submitted to the drawing
 /// buffer, for application at the end of the frame.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum DrawCommand {
     ClearScreen,
     ClearToColor {

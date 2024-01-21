@@ -1,3 +1,5 @@
+use std::fmt::Debug;
+
 use crate::{
     consoles::{ConsoleFrontEnd, DrawBatch, DrawCommand, ScreenScaler},
     fonts::FontStore,
@@ -134,7 +136,7 @@ impl BracketContext {
     }
 
     /// Print some text to the currently active terminal.
-    pub fn print<POS: Into<i32>, S: ToString>(&self, x: POS, y: POS, text: S) {
+    pub fn print<POS: Into<i32>, S: ToString + Debug>(&self, x: POS, y: POS, text: S) {
         self.terminals.lock()[self.current_layer()].print(x.into(), y.into(), &text.to_string());
     }
 

@@ -6,5 +6,3 @@ mod bterm_builder;
 pub use bterm_builder::*;
 mod loader_system;
 pub(crate) use loader_system::*;
-mod image_fixer;
-pub(crate) use image_fixer::*;

@@ -3,7 +3,7 @@ use bracket_bevy::prelude::*;
 use bracket_noise::prelude::*;
 use bracket_pathfinding::prelude::*;
 
-fn main() {
+pub fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugin(BTermBuilder::simple_80x50())
