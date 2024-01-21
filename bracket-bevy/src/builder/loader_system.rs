@@ -3,13 +3,14 @@ use crate::{
     TerminalLayer,
 };
 use bevy::{
-    prelude::{
-        AssetServer, Assets, Camera2dBundle, Commands, Component, HandleUntyped, Mesh, Res, ResMut,
+    asset::Handle,
+    prelude::{AssetServer, Assets, Camera2dBundle, Commands, Component, Mesh, Res, ResMut},
+    render::texture::{
+        Image, ImageAddressMode, ImageFilterMode, ImageLoaderSettings, ImageSampler,
+        ImageSamplerDescriptor,
     },
     sprite::ColorMaterial,
 };
-
-use super::image_fixer::ImagesToLoad;
 
 #[derive(Component)]
 pub struct BracketCamera;
@@ -32,11 +33,27 @@ pub(crate) fn load_terminals(
     new_context.scaling_mode = context.scaling_mode;
 
     // Load the fonts
-    let mut texture_handles = Vec::<HandleUntyped>::new();
     for font in context.fonts.iter() {
-        let texture_handle = asset_server.load(&font.filename);
+        let texture_handle: Handle<Image> = asset_server.load_with_settings(
+            &font.filename,
+            |settings: &mut ImageLoaderSettings| {
+                settings.sampler = ImageSampler::Descriptor(ImageSamplerDescriptor {
+                    label: None,
+                    address_mode_u: ImageAddressMode::ClampToEdge,
+                    address_mode_v: ImageAddressMode::ClampToEdge,
+                    address_mode_w: ImageAddressMode::ClampToEdge,
+                    mag_filter: ImageFilterMode::Nearest,
+                    min_filter: ImageFilterMode::Nearest,
+                    mipmap_filter: ImageFilterMode::Nearest,
+                    lod_min_clamp: 0.0,
+                    lod_max_clamp: 32.0,
+                    compare: None,
+                    anisotropy_clamp: 1,
+                    border_color: None,
+                })
+            },
+        );
         let material_handle = materials.add(ColorMaterial::from(texture_handle.clone()));
-        texture_handles.push(texture_handle.clone_untyped());
         new_context.fonts.push(FontStore::new(
             texture_handle,
             material_handle,
@@ -45,7 +62,6 @@ pub(crate) fn load_terminals(
             font.font_height_pixels,
         ));
     }
-    commands.insert_resource(ImagesToLoad(texture_handles));
 
     // Setup the consoles
     for (idx, terminal) in context.layers.iter().enumerate() {

@@ -5,9 +5,8 @@ use bracket_pathfinding::prelude::*;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
-        .add_plugin(BTermBuilder::simple_80x50())
-        .add_system(tick)
+        .add_plugins((DefaultPlugins, BTermBuilder::simple_80x50()))
+        .add_systems(Update, tick)
         .run();
 }
 

@@ -3,11 +3,11 @@ use bracket_bevy::prelude::*;
 use bracket_pathfinding::prelude::*;
 
 fn main() {
+    let bterm = BTermBuilder::simple_80x50().with_random_number_generator(true);
     App::new()
-        .add_plugins(DefaultPlugins)
-        .add_plugin(BTermBuilder::simple_80x50().with_random_number_generator(true))
-        .add_startup_system(setup)
-        .add_system(tick)
+        .add_plugins((DefaultPlugins, bterm))
+        .add_systems(Startup, setup)
+        .add_systems(Update, tick)
         .run();
 }
 
