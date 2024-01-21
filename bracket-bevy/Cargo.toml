@@ -1,6 +1,6 @@
 [package]
 name = "bracket-bevy"
-version = "0.9.0"
+version = "0.12.1"
 edition = "2021"
 authors = ["Herbert Wolverson <herberticus@gmail.com>"]
 publish = true
@@ -11,10 +11,6 @@ readme = "README.md"
 keywords = ["roguelike", "gamedev", "RGB", "HSV", "color"]
 categories = ["game-engines", "graphics"]
 license = "MIT"
-
-[[bin]]
-name = "example"
-path = "examples/bevy_textblock.rs"
 
 [dependencies]
 bevy = "0.12.1"

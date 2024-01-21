@@ -2,14 +2,13 @@ use bevy::prelude::*;
 use bracket_bevy::prelude::*;
 
 fn main() {
-    let bracket = BTermBuilder::empty()
+    let bterm = BTermBuilder::empty()
         .with_font("vga8x16-color-alpha.png", 16, 16, (8.0, 16.0))
         .with_simple_console(0, 80, 25);
 
     App::new()
-        .add_plugins(DefaultPlugins)
-        .add_plugin(bracket)
-        .add_system(tick)
+        .add_plugins((DefaultPlugins, bterm))
+        .add_systems(Update, tick)
         .run();
 }
 
