@@ -53,7 +53,6 @@ pub(crate) fn load_terminals(
                 })
             },
         );
-        // let texture_handle = asset_server.load(&font.filename);
         let material_handle = materials.add(ColorMaterial::from(texture_handle.clone()));
         new_context.fonts.push(FontStore::new(
             texture_handle,
