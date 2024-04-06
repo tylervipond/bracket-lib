@@ -134,7 +134,7 @@ impl Algorithm2D for State {
     }
 }
 
-fn tick(ctx: Res<BracketContext>, mut state: ResMut<State>, mouse: Res<Input<MouseButton>>) {
+fn tick(ctx: Res<BracketContext>, mut state: ResMut<State>, mouse: Res<ButtonInput<MouseButton>>) {
     // Let's use batched drawing
     let mut draw_batch = ctx.new_draw_batch();
 

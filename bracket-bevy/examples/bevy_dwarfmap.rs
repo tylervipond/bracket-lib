@@ -195,7 +195,7 @@ impl Algorithm3D for State {
     }
 }
 
-fn tick(ctx: Res<BracketContext>, mut state: Local<State>, mouse: Res<Input<MouseButton>>) {
+fn tick(ctx: Res<BracketContext>, mut state: Local<State>, mouse: Res<ButtonInput<MouseButton>>) {
     // Clear the screen
     ctx.cls();
 
