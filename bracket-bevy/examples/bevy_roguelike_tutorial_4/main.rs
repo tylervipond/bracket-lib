@@ -40,7 +40,7 @@ fn setup(mut commands: Commands, rng: Res<RandomNumbers>) {
 fn tick(
     ctx: Res<BracketContext>,
     map: Res<Map>,
-    keyboard: Res<Input<KeyCode>>,
+    keyboard: Res<ButtonInput<KeyCode>>,
     mut queries: ParamSet<(
         Query<&mut Position, With<Player>>,
         Query<(&Position, &Renderable)>,
