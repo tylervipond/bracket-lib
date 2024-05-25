@@ -1,6 +1,6 @@
 [package]
 name = "bracket-bevy"
-version = "0.12.1"
+version = "0.13.3"
 edition = "2021"
 authors = ["Herbert Wolverson <herberticus@gmail.com>"]
 publish = true
