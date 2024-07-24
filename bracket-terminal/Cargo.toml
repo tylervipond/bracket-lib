@@ -19,7 +19,7 @@ exclude = [
 bracket-color = { path = "../bracket-color", version = "~0.14", features = [ "palette" ] }
 bracket-geometry = { path = "../bracket-geometry", version = "~0.14" }
 bracket-rex = { path = "../bracket-rex", version = "~0.14" }
-bracket-embedding = { path = "../bracket-embedding", version = "~0.8" }
+bracket-embedding = { path = "../bracket-embedding", version = "~0.14" }
 lazy_static = "1.4.0"
 object-pool = "0.5.3"
 glow = { version = "~0.11", optional = true }
@@ -49,7 +49,7 @@ cross_term = [ "crossterm", "ctrlc" ]
 webgpu = [ "wgpu", "pollster", "image", "bytemuck", "png" ]
 
 [dev-dependencies]
-bracket-random = { path = "../bracket-random", version = "~0.8" }
+bracket-random = { path = "../bracket-random", version = "~0.14" }
 bracket-pathfinding = { path = "../bracket-pathfinding", version = "~0.14" }
 bracket-noise = { path = "../bracket-noise", version = "~0.14" }
 criterion = "~0.4"

@@ -42,7 +42,7 @@ bracket-color = { path = "./bracket-color", version = "~0.14", features = [ "pal
 bracket-geometry = { path = "./bracket-geometry", version = "~0.14" }
 bracket-noise = { path = "./bracket-noise", version = "~0.14" }
 bracket-pathfinding = { path = "./bracket-pathfinding", version = "~0.14" }
-bracket-random = { path = "./bracket-random", version = "~0.8", features = [ "parsing" ] }
+bracket-random = { path = "./bracket-random", version = "~0.14", features = [ "parsing" ] }
 bracket-terminal = { path = "./bracket-terminal", version = "~0.14", default-features = false }
 
 [workspace]
