@@ -394,23 +394,24 @@ impl From<[f32; 4]> for RGBA {
 
 // Support conversion from Bevy
 #[cfg(feature = "bevy")]
-impl From<bevy::prelude::Color> for RGBA {
-    fn from(item: bevy::prelude::Color) -> Self {
-        Self::from_f32(item.r(), item.g(), item.b(), item.a())
+impl From<bevy::color::Color> for RGBA {
+    fn from(item: bevy::color::Color) -> Self {
+        use bevy::color::LinearRgba;
+        let rgba = LinearRgba::from(item);
+        Self::from_f32(rgba.r, rgba.g, rgba.b, rgba.a)
     }
 }
 
 #[cfg(feature = "bevy")]
-impl From<RGBA> for bevy::prelude::Color {
-    fn from(item: RGBA) -> Self {
-        use bevy::render::color::Color;
-
-        Color::Rgba {
+impl From<RGBA> for bevy::color::Color {
+    fn from(item: RGB) -> Self {
+        use bevy::color::Color;
+        Color::LinearRgba(bevy::color::LinearRgba {
             red: item.r,
             green: item.g,
             blue: item.b,
             alpha: item.a,
-        }
+        })
     }
 }
 
