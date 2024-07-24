@@ -1,6 +1,6 @@
 [package]
 name = "bracket-terminal"
-version = "0.8.7"
+version = "0.14.0"
 authors = ["Herbert Wolverson <herberticus@gmail.com>"]
 edition = "2021"
 publish = true
@@ -16,9 +16,9 @@ exclude = [
 ]
 
 [dependencies]
-bracket-color = { path = "../bracket-color", version = "~0.8", features = [ "palette" ] }
-bracket-geometry = { path = "../bracket-geometry", version = "~0.8" }
-bracket-rex = { path = "../bracket-rex", version = "~0.8" }
+bracket-color = { path = "../bracket-color", version = "~0.14", features = [ "palette" ] }
+bracket-geometry = { path = "../bracket-geometry", version = "~0.14" }
+bracket-rex = { path = "../bracket-rex", version = "~0.14" }
 bracket-embedding = { path = "../bracket-embedding", version = "~0.8" }
 lazy_static = "1.4.0"
 object-pool = "0.5.3"
@@ -50,8 +50,8 @@ webgpu = [ "wgpu", "pollster", "image", "bytemuck", "png" ]
 
 [dev-dependencies]
 bracket-random = { path = "../bracket-random", version = "~0.8" }
-bracket-pathfinding = { path = "../bracket-pathfinding", version = "~0.8" }
-bracket-noise = { path = "../bracket-noise", version = "~0.8" }
+bracket-pathfinding = { path = "../bracket-pathfinding", version = "~0.14" }
+bracket-noise = { path = "../bracket-noise", version = "~0.14" }
 criterion = "~0.4"
 
 [target.wasm32-unknown-unknown.dependencies]
