@@ -1,6 +1,6 @@
 [package]
 name = "bracket-pathfinding"
-version = "0.8.7"
+version = "0.14.0"
 authors = ["Herbert Wolverson <herberticus@gmail.com>"]
 edition = "2021"
 publish = true
@@ -18,8 +18,8 @@ license = "MIT"
 threaded = ["rayon"]
 
 [dependencies]
-bracket-geometry = { path = "../bracket-geometry", version = "~0.8" }
-bracket-algorithm-traits = { path = "../bracket-algorithm-traits", version = "~0.8" }
+bracket-geometry = { path = "../bracket-geometry", version = "~0.14" }
+bracket-algorithm-traits = { path = "../bracket-algorithm-traits", version = "~0.14" }
 num-rational = { version = "0.4", default-features = false, features = ["std"] }
 rayon = { version = "1.5.0", optional = true }
 smallvec = "~1"
@@ -27,7 +27,7 @@ smallvec = "~1"
 [dev-dependencies]
 crossterm = "~0.25"
 bracket-random = { path = "../bracket-random", version = "0.8" }
-bracket-color = { path = "../bracket-color", version = "~0.8", features = [ "palette" ] }
+bracket-color = { path = "../bracket-color", version = "~0.14", features = [ "palette" ] }
 criterion = "~0.4"
 
 [[bench]]

@@ -1,6 +1,6 @@
 [package]
 name = "bracket-bevy"
-version = "0.13.3"
+version = "0.14.0"
 edition = "2021"
 authors = ["Herbert Wolverson <herberticus@gmail.com>"]
 publish = true
@@ -13,13 +13,13 @@ categories = ["game-engines", "graphics"]
 license = "MIT"
 
 [dependencies]
-bevy = "0.13.2"
+bevy = "0.14.0"
 parking_lot = "0.12"
 lazy_static = "1.4"
 bracket-random = { path = "../bracket-random" }
 bracket-color = { path = "../bracket-color", features = [ "bevy" ] }
-bracket-geometry = { path = "../bracket-geometry", version = "~0.8", features = [ "bevy" ] }
+bracket-geometry = { path = "../bracket-geometry", version = "~0.14", features = [ "bevy" ] }
 
 [dev-dependencies]
-bracket-pathfinding = { path = "../bracket-pathfinding", version = "~0.8" }
-bracket-noise = { path = "../bracket-noise", version = "~0.8" }
+bracket-pathfinding = { path = "../bracket-pathfinding", version = "~0.14" }
+bracket-noise = { path = "../bracket-noise", version = "~0.14" }
