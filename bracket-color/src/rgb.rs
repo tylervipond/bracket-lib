@@ -126,7 +126,7 @@ impl From<bevy::color::Color> for RGB {
     fn from(item: bevy::color::Color) -> Self {
         use bevy::color::LinearRgba;
         let rgba = LinearRgba::from(item);
-        Self::from_f32(rgba.r, rgba.g, rgba.b)
+        Self::from_f32(rgba.red, rgba.green, rgba.blue)
     }
 }
 
@@ -142,7 +142,6 @@ impl From<RGB> for bevy::color::Color {
         })
     }
 }
-
 
 impl RGB {
     /// Constructs a new, zeroed (black) RGB triplet.
