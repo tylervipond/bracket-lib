@@ -298,15 +298,15 @@ impl RGBA {
     #[cfg(feature = "bevy")]
     #[must_use]
     pub fn as_rgba_f32(&self) -> [f32; 4] {
-        use bevy::render::color::Color;
+        use bevy::color::LinearRgba;
 
-        let color = Color::Rgba {
+        let color = LinearRgba {
             red: self.r,
             green: self.g,
             blue: self.b,
             alpha: self.a,
         };
-        bevy::prelude::Color::as_linear_rgba_f32(color)
+        [color.red, color.green, color.blue, color.alpha]
     }
 
     /// Applies a quick grayscale conversion to the color
@@ -398,13 +398,13 @@ impl From<bevy::color::Color> for RGBA {
     fn from(item: bevy::color::Color) -> Self {
         use bevy::color::LinearRgba;
         let rgba = LinearRgba::from(item);
-        Self::from_f32(rgba.r, rgba.g, rgba.b, rgba.a)
+        Self::from_f32(rgba.red, rgba.green, rgba.blue, rgba.alpha)
     }
 }
 
 #[cfg(feature = "bevy")]
 impl From<RGBA> for bevy::color::Color {
-    fn from(item: RGB) -> Self {
+    fn from(item: RGBA) -> Self {
         use bevy::color::Color;
         Color::LinearRgba(bevy::color::LinearRgba {
             red: item.r,
