@@ -124,8 +124,8 @@ impl From<RGBA> for RGB {
 #[cfg(feature = "bevy")]
 impl From<bevy::color::Color> for RGB {
     fn from(item: bevy::color::Color) -> Self {
-        use bevy::color::LinearRgba;
-        let rgba = LinearRgba::from(item);
+        use bevy::color::Srgba;
+        let rgba = Srgba::from(item);
         Self::from_f32(rgba.red, rgba.green, rgba.blue)
     }
 }
@@ -134,7 +134,9 @@ impl From<bevy::color::Color> for RGB {
 impl From<RGB> for bevy::color::Color {
     fn from(item: RGB) -> Self {
         use bevy::color::Color;
-        Color::LinearRgba(bevy::color::LinearRgba {
+        use bevy::color::Srgba;
+
+        Color::Srgba(Srgba {
             red: item.r,
             green: item.g,
             blue: item.b,

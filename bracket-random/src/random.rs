@@ -1,4 +1,3 @@
-#[cfg(feature = "parsing")]
 use crate::prelude::{parse_dice_string, DiceParseError, DiceType};
 use rand::{Rng, RngCore, SeedableRng};
 use rand_xorshift::XorShiftRng;
@@ -83,13 +82,11 @@ impl RandomNumberGenerator {
     }
 
     /// Rolls dice based on a DiceType struct, including application of the bonus
-    #[cfg(feature = "parsing")]
     pub fn roll(&mut self, dice: DiceType) -> i32 {
         self.roll_dice(dice.n_dice, dice.die_type) + dice.bonus
     }
 
     /// Rolls dice based on passing in a string, such as roll_str("1d12")
-    #[cfg(feature = "parsing")]
     pub fn roll_str<S: ToString>(&mut self, dice: S) -> Result<i32, DiceParseError> {
         match parse_dice_string(&dice.to_string()) {
             Ok(dt) => Ok(self.roll(dt)),

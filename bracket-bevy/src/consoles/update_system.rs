@@ -57,7 +57,7 @@ pub(crate) fn replace_meshes(
     }
 
     for (old, _, _) in ctx.mesh_replacement.iter().filter(|(_, _, done)| *done) {
-        meshes.remove(old.0.clone());
+        meshes.remove(&old.0);
     }
     ctx.mesh_replacement.retain(|(_, _, done)| !done);
 }
@@ -109,7 +109,7 @@ pub(crate) fn update_mouse_position(
     if let Some(screen_pos) = window.cursor_position() {
         let window_size = Vec2::new(window.width(), window.height());
         let ndc = (screen_pos / window_size) * 2.0 - Vec2::ONE;
-        let ndc_to_world = camera_transform.compute_matrix() * camera.projection_matrix().inverse();
+        let ndc_to_world = camera_transform.compute_matrix() * camera.clip_from_view().inverse();
         let world_pos = ndc_to_world.project_point3(ndc.extend(-1.0));
         let world_pos: Vec2 = world_pos.truncate();
 

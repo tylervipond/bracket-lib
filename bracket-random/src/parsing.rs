@@ -56,7 +56,6 @@ impl error::Error for DiceParseError {
 
 #[allow(dead_code)]
 // Parses a dice string, of the type "1d6+3", "3d8-4" or "1d20".
-#[cfg(feature = "parsing")]
 pub fn parse_dice_string(dice: &str) -> Result<DiceType, DiceParseError> {
     let dice = &dice.split_whitespace().collect::<Vec<_>>().join("");
     lazy_static! {

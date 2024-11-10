@@ -49,18 +49,6 @@ impl RandomNumbers {
         self.rng.lock().next_u64()
     }
 
-    /// Rolls dice based on a DiceType struct, including application of the bonus
-    #[cfg(feature = "parsing")]
-    pub fn roll(&self, dice: DiceType) -> i32 {
-        self.rng.lock().roll_dice(dice)
-    }
-
-    /// Rolls dice based on passing in a string, such as roll_str("1d12")
-    #[cfg(feature = "parsing")]
-    pub fn roll_str<S: ToString>(&self, dice: S) -> Result<i32, DiceParseError> {
-        self.rng.lock().roll_str(dice)
-    }
-
     /// Returns a random index into a slice
     pub fn random_slice_index<T>(&self, slice: &[T]) -> Option<usize> {
         self.rng.lock().random_slice_index(slice)

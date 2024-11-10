@@ -298,9 +298,8 @@ impl RGBA {
     #[cfg(feature = "bevy")]
     #[must_use]
     pub fn as_rgba_f32(&self) -> [f32; 4] {
-        use bevy::color::LinearRgba;
-
-        let color = LinearRgba {
+        use bevy::color::Srgba;
+        let color = Srgba {
             red: self.r,
             green: self.g,
             blue: self.b,
@@ -396,8 +395,8 @@ impl From<[f32; 4]> for RGBA {
 #[cfg(feature = "bevy")]
 impl From<bevy::color::Color> for RGBA {
     fn from(item: bevy::color::Color) -> Self {
-        use bevy::color::LinearRgba;
-        let rgba = LinearRgba::from(item);
+        use bevy::color::Srgba;
+        let rgba = Srgba::from(item);
         Self::from_f32(rgba.red, rgba.green, rgba.blue, rgba.alpha)
     }
 }
@@ -406,7 +405,7 @@ impl From<bevy::color::Color> for RGBA {
 impl From<RGBA> for bevy::color::Color {
     fn from(item: RGBA) -> Self {
         use bevy::color::Color;
-        Color::LinearRgba(bevy::color::LinearRgba {
+        Color::Srgba(bevy::color::Srgba {
             red: item.r,
             green: item.g,
             blue: item.b,
