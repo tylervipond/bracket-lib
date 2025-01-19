@@ -1,5 +1,7 @@
+use crate::color::ColorPair;
+
 use super::TextAlign;
-use bracket_color::prelude::{ColorPair, RGBA};
+use bevy::color::Srgba;
 use bracket_geometry::prelude::{Point, Rect};
 
 #[derive(Debug)]
@@ -34,7 +36,7 @@ impl DrawBatch {
     /// Adds a CLS (clear screen) to the drawing batch
     pub fn cls_color<COLOR>(&mut self, color: COLOR) -> &mut Self
     where
-        COLOR: Into<RGBA>,
+        COLOR: Into<Srgba>,
     {
         let z = self.next_z();
         self.batch.push((
@@ -90,7 +92,7 @@ impl DrawBatch {
     /// Sets an individual cell glyph
     pub fn set_bg<COLOR>(&mut self, pos: Point, bg: COLOR) -> &mut Self
     where
-        COLOR: Into<RGBA>,
+        COLOR: Into<Srgba>,
     {
         let z = self.next_z();
         self.batch
@@ -101,7 +103,7 @@ impl DrawBatch {
     /// Sets an individual cell glyph with specified render order
     pub fn set_bg_with_z<COLOR>(&mut self, pos: Point, bg: COLOR, z: u32) -> &mut Self
     where
-        COLOR: Into<RGBA>,
+        COLOR: Into<Srgba>,
     {
         self.batch
             .push((z, DrawCommand::SetBackground { pos, bg: bg.into() }));
@@ -116,7 +118,7 @@ impl DrawBatch {
         pos: Point,
         text: S,
         align: TextAlign,
-        background: Option<RGBA>,
+        background: Option<Srgba>,
     ) -> &mut Self {
         let z = self.next_z();
         self.batch.push((
@@ -139,7 +141,7 @@ impl DrawBatch {
         pos: Point,
         text: S,
         align: TextAlign,
-        background: Option<RGBA>,
+        background: Option<Srgba>,
         z: u32,
     ) -> &mut Self {
         self.batch.push((
@@ -671,7 +673,7 @@ impl DrawBatch {
 pub enum DrawCommand {
     ClearScreen,
     ClearToColor {
-        color: RGBA,
+        color: Srgba,
     },
     SetTarget {
         console: usize,
@@ -683,7 +685,7 @@ pub enum DrawCommand {
     },
     SetBackground {
         pos: Point,
-        bg: RGBA,
+        bg: Srgba,
     },
     Print {
         pos: Point,
@@ -725,7 +727,7 @@ pub enum DrawCommand {
         pos: Point,
         text: String,
         align: TextAlign,
-        background: Option<RGBA>,
+        background: Option<Srgba>,
     },
     Box {
         pos: Rect,

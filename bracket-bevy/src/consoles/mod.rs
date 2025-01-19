@@ -1,4 +1,7 @@
-use bevy::prelude::{Assets, Handle, Mesh};
+use bevy::{
+    color::Srgba,
+    prelude::{Assets, Handle, Mesh},
+};
 mod simple_console;
 use bracket_geometry::prelude::{Point, Rect};
 pub(crate) use simple_console::*;
@@ -8,7 +11,6 @@ pub(crate) use update_system::*;
 mod sparse_console;
 pub(crate) use sparse_console::*;
 pub(crate) mod common_draw;
-use bracket_color::prelude::RGBA;
 mod text_spans;
 pub(crate) use text_spans::*;
 mod scaler;
@@ -25,21 +27,21 @@ pub(crate) trait ConsoleFrontEnd: Sync + Send {
     fn get_clipping(&self) -> Option<Rect>;
     fn set_clipping(&mut self, clipping: Option<Rect>);
     fn cls(&mut self);
-    fn cls_bg(&mut self, color: RGBA);
+    fn cls_bg(&mut self, color: Srgba);
     fn print(&mut self, x: i32, y: i32, text: &str);
-    fn print_color(&mut self, x: i32, y: i32, text: &str, foreground: RGBA, background: RGBA);
+    fn print_color(&mut self, x: i32, y: i32, text: &str, foreground: Srgba, background: Srgba);
     fn print_centered(&mut self, y: i32, text: &str);
-    fn print_color_centered(&mut self, y: i32, fg: RGBA, bg: RGBA, text: &str);
+    fn print_color_centered(&mut self, y: i32, fg: Srgba, bg: Srgba, text: &str);
     fn print_centered_at(&mut self, x: i32, y: i32, text: &str);
-    fn print_color_centered_at(&mut self, x: i32, y: i32, fg: RGBA, bg: RGBA, text: &str);
+    fn print_color_centered_at(&mut self, x: i32, y: i32, fg: Srgba, bg: Srgba, text: &str);
     fn print_right(&mut self, x: i32, y: i32, text: &str);
-    fn print_color_right(&mut self, x: i32, y: i32, fg: RGBA, bg: RGBA, text: &str);
-    fn set(&mut self, x: i32, y: i32, fg: RGBA, bg: RGBA, glyph: FontCharType);
-    fn set_bg(&mut self, x: i32, y: i32, bg: RGBA);
-    fn draw_box(&mut self, x: i32, y: i32, width: i32, height: i32, fg: RGBA, bg: RGBA);
-    fn draw_hollow_box(&mut self, x: i32, y: i32, width: i32, height: i32, fg: RGBA, bg: RGBA);
+    fn print_color_right(&mut self, x: i32, y: i32, fg: Srgba, bg: Srgba, text: &str);
+    fn set(&mut self, x: i32, y: i32, fg: Srgba, bg: Srgba, glyph: FontCharType);
+    fn set_bg(&mut self, x: i32, y: i32, bg: Srgba);
+    fn draw_box(&mut self, x: i32, y: i32, width: i32, height: i32, fg: Srgba, bg: Srgba);
+    fn draw_hollow_box(&mut self, x: i32, y: i32, width: i32, height: i32, fg: Srgba, bg: Srgba);
 
-    fn draw_box_double(&mut self, x: i32, y: i32, width: i32, height: i32, fg: RGBA, bg: RGBA);
+    fn draw_box_double(&mut self, x: i32, y: i32, width: i32, height: i32, fg: Srgba, bg: Srgba);
 
     fn draw_hollow_box_double(
         &mut self,
@@ -47,11 +49,11 @@ pub(crate) trait ConsoleFrontEnd: Sync + Send {
         y: i32,
         width: i32,
         height: i32,
-        fg: RGBA,
-        bg: RGBA,
+        fg: Srgba,
+        bg: Srgba,
     );
 
-    fn fill_region(&mut self, target: Rect, glyph: FontCharType, fg: RGBA, bg: RGBA);
+    fn fill_region(&mut self, target: Rect, glyph: FontCharType, fg: Srgba, bg: Srgba);
 
     fn printer(
         &mut self,
@@ -60,7 +62,7 @@ pub(crate) trait ConsoleFrontEnd: Sync + Send {
         y: i32,
         output: &str,
         align: TextAlign,
-        background: Option<RGBA>,
+        background: Option<Srgba>,
     );
 
     fn in_bounds(&self, x: i32, y: i32) -> bool {
@@ -90,8 +92,8 @@ pub(crate) trait ConsoleFrontEnd: Sync + Send {
         width: i32,
         n: i32,
         max: i32,
-        fg: RGBA,
-        bg: RGBA,
+        fg: Srgba,
+        bg: Srgba,
     );
 
     /// Draws a vertical progress bar.
@@ -103,8 +105,8 @@ pub(crate) trait ConsoleFrontEnd: Sync + Send {
         height: i32,
         n: i32,
         max: i32,
-        fg: RGBA,
-        bg: RGBA,
+        fg: Srgba,
+        bg: Srgba,
     );
 
     /// Sets ALL tiles foreground alpha (only tiles that exist, in sparse consoles).

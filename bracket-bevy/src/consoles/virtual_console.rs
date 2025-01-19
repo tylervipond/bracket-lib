@@ -1,4 +1,5 @@
-use bracket_color::prelude::RGBA;
+use bevy::color::Srgba;
+use bevy::prelude::ColorToComponents;
 use bracket_geometry::prelude::{Point, Rect};
 
 use super::{common_draw, ConsoleFrontEnd, TerminalGlyph};
@@ -52,7 +53,6 @@ impl VirtualConsole {
             terminal: Vec::with_capacity(num_tiles),
             clipping: None,
         };
-        //println!("{}x{}", console.width, console.height);
 
         for _ in 0..num_tiles {
             console.terminal.push(TerminalGlyph::default());
@@ -84,7 +84,13 @@ impl VirtualConsole {
                 if let Some(idx) = self.try_at(source_x, source_y) {
                     let t = self.terminal[idx];
                     if t.glyph > 0 {
-                        target.set(x, y, t.foreground.into(), t.background.into(), t.glyph);
+                        target.set(
+                            x,
+                            y,
+                            Srgba::from_f32_array(t.foreground),
+                            Srgba::from_f32_array(t.background),
+                            t.glyph,
+                        );
                     }
                 }
             }
@@ -128,25 +134,25 @@ impl ConsoleFrontEnd for VirtualConsole {
             .for_each(|c| *c = TerminalGlyph::default());
     }
 
-    fn cls_bg(&mut self, color: RGBA) {
+    fn cls_bg(&mut self, color: Srgba) {
         self.terminal
             .iter_mut()
-            .for_each(|c| c.background = color.as_rgba_f32());
+            .for_each(|c| c.background = color.to_f32_array());
     }
 
-    fn set(&mut self, x: i32, y: i32, fg: RGBA, bg: RGBA, glyph: FontCharType) {
+    fn set(&mut self, x: i32, y: i32, fg: Srgba, bg: Srgba, glyph: FontCharType) {
         if let Some(idx) = self.try_at(x, y) {
             self.terminal[idx] = TerminalGlyph {
                 glyph,
-                foreground: fg.as_rgba_f32(),
-                background: bg.as_rgba_f32(),
+                foreground: fg.to_f32_array(),
+                background: bg.to_f32_array(),
             };
         }
     }
 
-    fn set_bg(&mut self, x: i32, y: i32, bg: RGBA) {
+    fn set_bg(&mut self, x: i32, y: i32, bg: Srgba) {
         if let Some(idx) = self.try_at(x, y) {
-            self.terminal[idx].background = bg.as_rgba_f32();
+            self.terminal[idx].background = bg.to_f32_array();
         }
     }
 
@@ -154,7 +160,7 @@ impl ConsoleFrontEnd for VirtualConsole {
         common_draw::print(self, x, y, text);
     }
 
-    fn print_color(&mut self, x: i32, y: i32, text: &str, foreground: RGBA, background: RGBA) {
+    fn print_color(&mut self, x: i32, y: i32, text: &str, foreground: Srgba, background: Srgba) {
         common_draw::print_color(self, x, y, text, foreground, background);
     }
 
@@ -165,7 +171,7 @@ impl ConsoleFrontEnd for VirtualConsole {
         y: i32,
         output: &str,
         align: crate::consoles::TextAlign,
-        background: Option<RGBA>,
+        background: Option<Srgba>,
     ) {
         common_draw::printer(self, context, x, y, output, align, background);
     }
@@ -182,7 +188,7 @@ impl ConsoleFrontEnd for VirtualConsole {
         self.print(x - (text.to_string().len() / 2) as i32, y, text);
     }
 
-    fn print_color_centered(&mut self, y: i32, fg: RGBA, bg: RGBA, text: &str) {
+    fn print_color_centered(&mut self, y: i32, fg: Srgba, bg: Srgba, text: &str) {
         self.print_color(
             (self.width as i32 / 2) - (text.to_string().len() / 2) as i32,
             y,
@@ -192,7 +198,7 @@ impl ConsoleFrontEnd for VirtualConsole {
         );
     }
 
-    fn print_color_centered_at(&mut self, x: i32, y: i32, fg: RGBA, bg: RGBA, text: &str) {
+    fn print_color_centered_at(&mut self, x: i32, y: i32, fg: Srgba, bg: Srgba, text: &str) {
         self.print_color(x - (text.to_string().len() / 2) as i32, y, text, fg, bg);
     }
 
@@ -202,21 +208,21 @@ impl ConsoleFrontEnd for VirtualConsole {
         self.print(actual_x, y, text);
     }
 
-    fn print_color_right(&mut self, x: i32, y: i32, fg: RGBA, bg: RGBA, text: &str) {
+    fn print_color_right(&mut self, x: i32, y: i32, fg: Srgba, bg: Srgba, text: &str) {
         let len = text.len() as i32;
         let actual_x = x - len;
         self.print_color(actual_x, y, text, fg, bg);
     }
 
-    fn draw_box(&mut self, sx: i32, sy: i32, width: i32, height: i32, fg: RGBA, bg: RGBA) {
+    fn draw_box(&mut self, sx: i32, sy: i32, width: i32, height: i32, fg: Srgba, bg: Srgba) {
         common_draw::draw_box(self, sx, sy, width, height, fg, bg);
     }
 
-    fn draw_hollow_box(&mut self, x: i32, y: i32, width: i32, height: i32, fg: RGBA, bg: RGBA) {
+    fn draw_hollow_box(&mut self, x: i32, y: i32, width: i32, height: i32, fg: Srgba, bg: Srgba) {
         common_draw::draw_hollow_box(self, x, y, width, height, fg, bg);
     }
 
-    fn draw_box_double(&mut self, x: i32, y: i32, width: i32, height: i32, fg: RGBA, bg: RGBA) {
+    fn draw_box_double(&mut self, x: i32, y: i32, width: i32, height: i32, fg: Srgba, bg: Srgba) {
         common_draw::draw_box_double(self, x, y, width, height, fg, bg);
     }
 
@@ -226,13 +232,13 @@ impl ConsoleFrontEnd for VirtualConsole {
         y: i32,
         width: i32,
         height: i32,
-        fg: RGBA,
-        bg: RGBA,
+        fg: Srgba,
+        bg: Srgba,
     ) {
         common_draw::draw_hollow_box_double(self, x, y, width, height, fg, bg);
     }
 
-    fn fill_region(&mut self, target: Rect, glyph: FontCharType, fg: RGBA, bg: RGBA) {
+    fn fill_region(&mut self, target: Rect, glyph: FontCharType, fg: Srgba, bg: Srgba) {
         target.for_each(|point| {
             self.set(point.x, point.y, fg, bg, glyph);
         });
@@ -245,8 +251,8 @@ impl ConsoleFrontEnd for VirtualConsole {
         width: i32,
         n: i32,
         max: i32,
-        fg: RGBA,
-        bg: RGBA,
+        fg: Srgba,
+        bg: Srgba,
     ) {
         common_draw::draw_bar_horizontal(self, x, y, width, n, max, fg, bg);
     }
@@ -258,8 +264,8 @@ impl ConsoleFrontEnd for VirtualConsole {
         height: i32,
         n: i32,
         max: i32,
-        fg: RGBA,
-        bg: RGBA,
+        fg: Srgba,
+        bg: Srgba,
     ) {
         common_draw::draw_bar_vertical(self, x, y, height, n, max, fg, bg);
     }

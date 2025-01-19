@@ -1,9 +1,7 @@
 use crate::rect::Rect;
-use bevy::prelude::Resource;
-use bracket_bevy::{
-    prelude::{to_cp437, RGB},
-    BracketContext, RandomNumbers,
-};
+use bevy::prelude::ColorToComponents;
+use bevy::{color::Srgba, prelude::Resource};
+use bracket_bevy::{prelude::to_cp437, BracketContext, RandomNumbers};
 use std::cmp::{max, min};
 
 #[derive(PartialEq, Copy, Clone)]
@@ -126,8 +124,8 @@ pub fn draw_map(map: &[TileType], ctx: &BracketContext) {
                 ctx.set(
                     x,
                     y,
-                    RGB::from_f32(0.5, 0.5, 0.5),
-                    RGB::from_f32(0., 0., 0.),
+                    Srgba::from_f32_array([0.5, 0.5, 0.5, 1.0]),
+                    Srgba::from_f32_array([0., 0., 0., 1.0]),
                     to_cp437('.'),
                 );
             }
@@ -135,8 +133,8 @@ pub fn draw_map(map: &[TileType], ctx: &BracketContext) {
                 ctx.set(
                     x,
                     y,
-                    RGB::from_f32(0.0, 1.0, 0.0),
-                    RGB::from_f32(0., 0., 0.),
+                    Srgba::from_f32_array([0.0, 1.0, 0.0, 1.0]),
+                    Srgba::from_f32_array([0., 0., 0., 1.0]),
                     to_cp437('#'),
                 );
             }

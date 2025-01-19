@@ -5,8 +5,7 @@ use crate::{
     fonts::FontStore,
     FontCharType, TerminalScalingMode,
 };
-use bevy::{sprite::Mesh2dHandle, utils::HashMap, prelude::Resource};
-use bracket_color::prelude::RGBA;
+use bevy::{color::Srgba, prelude::Resource, sprite::Mesh2dHandle, utils::HashMap};
 use bracket_geometry::prelude::{Point, Rect};
 use parking_lot::Mutex;
 
@@ -15,7 +14,7 @@ pub struct BracketContext {
     pub(crate) fonts: Vec<FontStore>,
     pub(crate) terminals: Mutex<Vec<Box<dyn ConsoleFrontEnd>>>,
     pub(crate) current_layer: Mutex<usize>,
-    pub(crate) color_palette: HashMap<String, RGBA>,
+    pub(crate) color_palette: HashMap<String, Srgba>,
     pub fps: f64,
     pub frame_time_ms: f64,
     pub(crate) mesh_replacement: Vec<(Mesh2dHandle, Mesh2dHandle, bool)>,
@@ -25,7 +24,7 @@ pub struct BracketContext {
 }
 
 impl BracketContext {
-    pub(crate) fn new(color_palette: HashMap<String, RGBA>) -> Self {
+    pub(crate) fn new(color_palette: HashMap<String, Srgba>) -> Self {
         Self {
             fonts: Vec::new(),
             terminals: Mutex::new(Vec::new()),
@@ -108,12 +107,12 @@ impl BracketContext {
 
     /// Set the background on the current layer to a uniform color.
     /// Only useful for Simple consoles.
-    pub fn cls_bg<C: Into<RGBA>>(&self, color: C) {
+    pub fn cls_bg<C: Into<Srgba>>(&self, color: C) {
         self.terminals.lock()[self.current_layer()].cls_bg(color.into());
     }
 
     /// Set a character at (x,y) to a specified foreground, background and glyph.
-    pub fn set<POS: Into<i32>, C: Into<RGBA>>(
+    pub fn set<POS: Into<i32>, C: Into<Srgba>>(
         &self,
         x: POS,
         y: POS,
@@ -131,7 +130,7 @@ impl BracketContext {
     }
 
     /// Set just the background color of a terminal cell.
-    pub fn set_bg<POS: Into<i32>, C: Into<RGBA>>(&self, x: POS, y: POS, bg: C) {
+    pub fn set_bg<POS: Into<i32>, C: Into<Srgba>>(&self, x: POS, y: POS, bg: C) {
         self.terminals.lock()[self.current_layer()].set_bg(x.into(), y.into(), bg.into());
     }
 
@@ -146,7 +145,7 @@ impl BracketContext {
     }
 
     /// Print some text, centered along the `y` line, to the current terminal in the specified color.
-    pub fn print_color_centered<POS: Into<i32>, S: ToString, C: Into<RGBA>>(
+    pub fn print_color_centered<POS: Into<i32>, S: ToString, C: Into<Srgba>>(
         &self,
         y: POS,
         fg: C,
@@ -171,7 +170,7 @@ impl BracketContext {
     }
 
     /// Print some text, cenetered around (x,y) to the current terminal in the specified colors.
-    pub fn print_color_centered_at<POS: Into<i32>, S: ToString, C: Into<RGBA>>(
+    pub fn print_color_centered_at<POS: Into<i32>, S: ToString, C: Into<Srgba>>(
         &self,
         x: POS,
         y: POS,
@@ -198,7 +197,7 @@ impl BracketContext {
     }
 
     /// Print some text, right justified at (x,y), to the current terminal layer in the specified colors.
-    pub fn print_color_right<POS: Into<i32>, S: ToString, C: Into<RGBA>>(
+    pub fn print_color_right<POS: Into<i32>, S: ToString, C: Into<Srgba>>(
         &self,
         x: POS,
         y: POS,
@@ -216,7 +215,7 @@ impl BracketContext {
     }
 
     /// Print some text in color at the specified (x,y) coordinates.
-    pub fn print_color<POS: Into<i32>, S: ToString, C: Into<RGBA>>(
+    pub fn print_color<POS: Into<i32>, S: ToString, C: Into<Srgba>>(
         &self,
         x: POS,
         y: POS,
@@ -240,7 +239,7 @@ impl BracketContext {
         y: POS,
         output: S,
         align: crate::consoles::TextAlign,
-        background: Option<RGBA>,
+        background: Option<Srgba>,
     ) {
         self.terminals.lock()[self.current_layer()].printer(
             self,
@@ -253,7 +252,7 @@ impl BracketContext {
     }
 
     /// Draws a filled box, with single line characters.
-    pub fn draw_box<POS: Into<i32>, C: Into<RGBA>>(
+    pub fn draw_box<POS: Into<i32>, C: Into<Srgba>>(
         &self,
         x: POS,
         y: POS,
@@ -273,7 +272,7 @@ impl BracketContext {
     }
 
     /// Draw a hollow box with single line characters.
-    pub fn draw_hollow_box<POS: Into<i32>, C: Into<RGBA>>(
+    pub fn draw_hollow_box<POS: Into<i32>, C: Into<Srgba>>(
         &self,
         x: POS,
         y: POS,
@@ -293,7 +292,7 @@ impl BracketContext {
     }
 
     /// Draw a filled box with double-line characters.
-    pub fn draw_box_double<POS: Into<i32>, C: Into<RGBA>>(
+    pub fn draw_box_double<POS: Into<i32>, C: Into<Srgba>>(
         &self,
         x: POS,
         y: POS,
@@ -313,7 +312,7 @@ impl BracketContext {
     }
 
     /// Draw an empty box with double-line characters.
-    pub fn draw_hollow_box_double<POS: Into<i32>, C: Into<RGBA>>(
+    pub fn draw_hollow_box_double<POS: Into<i32>, C: Into<Srgba>>(
         &self,
         x: POS,
         y: POS,
@@ -333,7 +332,7 @@ impl BracketContext {
     }
 
     /// Fill a region specified by a rectangle with a specified glyph, and colors.
-    pub fn fill_region<C: Into<RGBA>>(&self, target: Rect, glyph: FontCharType, fg: C, bg: C) {
+    pub fn fill_region<C: Into<Srgba>>(&self, target: Rect, glyph: FontCharType, fg: C, bg: C) {
         self.terminals.lock()[self.current_layer()].fill_region(
             target,
             glyph,
@@ -344,7 +343,7 @@ impl BracketContext {
 
     /// Draw a horizontal progress bar.
     #[allow(clippy::too_many_arguments)]
-    pub fn draw_bar_horizontal<POS: Into<i32>, C: Into<RGBA>>(
+    pub fn draw_bar_horizontal<POS: Into<i32>, C: Into<Srgba>>(
         &self,
         x: POS,
         y: POS,
@@ -367,7 +366,7 @@ impl BracketContext {
 
     /// Draw a vertical progress bar.
     #[allow(clippy::too_many_arguments)]
-    pub fn draw_bar_vertical<POS: Into<i32>, C: Into<RGBA>>(
+    pub fn draw_bar_vertical<POS: Into<i32>, C: Into<Srgba>>(
         &self,
         x: POS,
         y: POS,
@@ -406,7 +405,7 @@ impl BracketContext {
     /// Retrieve a named color from the palette.
     /// Note that this replaces the `bracket_color` palette; there were performance problems
     /// using it on Bevy.
-    pub fn get_named_color(&self, color: &str) -> Option<&RGBA> {
+    pub fn get_named_color(&self, color: &str) -> Option<&Srgba> {
         self.color_palette.get(color)
     }
 
@@ -502,7 +501,7 @@ impl BracketContext {
                     color.bg,
                 ),
                 DrawCommand::FillRegion { pos, color, glyph } => {
-                    self.fill_region::<RGBA>(*pos, *glyph, color.fg, color.bg)
+                    self.fill_region::<Srgba>(*pos, *glyph, color.fg, color.bg)
                 }
                 DrawCommand::BarHorizontal {
                     pos,

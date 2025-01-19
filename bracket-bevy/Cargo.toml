@@ -17,7 +17,6 @@ bevy = "0.14.0"
 parking_lot = "0.12"
 lazy_static = "1.4"
 bracket-random = { path = "../bracket-random" }
-bracket-color = { path = "../bracket-color", features = [ "bevy" ] }
 bracket-geometry = { path = "../bracket-geometry", version = "~0.14", features = [ "bevy" ] }
 
 [dev-dependencies]

@@ -31,8 +31,8 @@ fn setup(mut commands: Commands, rng: Res<RandomNumbers>) {
         })
         .insert(Renderable {
             glyph: to_cp437('@'),
-            fg: RGB::named(YELLOW),
-            bg: RGB::named(BLACK),
+            fg: Srgba::from_f32_array([1.0, 1.0, 0.0, 1.0]),
+            bg: Srgba::from_f32_array([0.0, 0.0, 0.0, 1.0]),
         })
         .insert(Player {});
 }

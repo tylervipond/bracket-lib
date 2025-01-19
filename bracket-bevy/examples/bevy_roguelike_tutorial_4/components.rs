@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bracket_bevy::prelude::RGB;
 
 #[derive(Component)]
 pub struct Position {
@@ -10,8 +9,8 @@ pub struct Position {
 #[derive(Component)]
 pub struct Renderable {
     pub glyph: u16,
-    pub fg: RGB,
-    pub bg: RGB,
+    pub fg: Srgba,
+    pub bg: Srgba,
 }
 
 #[derive(Component, Debug)]

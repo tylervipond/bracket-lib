@@ -1,9 +1,15 @@
-use bracket_color::prelude::{ColorPair, RGB, RGBA};
+use bevy::color::{ColorToComponents, Srgba};
 use bracket_geometry::prelude::{Point, Rect};
 use std::cmp;
 
 use crate::{
-    consoles::TerminalGlyph, cp437::string_to_cp437, BracketContext, DrawBatch, FontCharType,
+    color::{
+        constants::{BLACK, WHITE},
+        ColorPair,
+    },
+    consoles::TerminalGlyph,
+    cp437::string_to_cp437,
+    BracketContext, DrawBatch, FontCharType,
 };
 
 pub struct TextBlock {
@@ -11,8 +17,8 @@ pub struct TextBlock {
     y: i32,
     width: i32,
     height: i32,
-    fg: RGBA,
-    bg: RGBA,
+    fg: Srgba,
+    bg: Srgba,
     buffer: Vec<TerminalGlyph>,
     cursor: (i32, i32),
 }
@@ -33,13 +39,13 @@ impl TextBlock {
             y,
             width,
             height,
-            fg: RGBA::from_f32(1.0, 1.0, 1.0, 1.0),
-            bg: RGBA::from_f32(0.0, 0.0, 0.0, 1.0),
+            fg: Srgba::rgb(1.0, 1.0, 1.0),
+            bg: Srgba::rgb(0.0, 0.0, 0.0),
             buffer: vec![
                 TerminalGlyph {
                     glyph: 0,
-                    foreground: RGBA::from_f32(1.0, 1.0, 1.0, 1.0).as_rgba_f32(),
-                    background: RGBA::from_f32(0.0, 0.0, 0.0, 1.0).as_rgba_f32(),
+                    foreground: WHITE.to_f32_array(),
+                    background: BLACK.to_f32_array(),
                 };
                 width as usize * height as usize
             ],
@@ -47,16 +53,16 @@ impl TextBlock {
         }
     }
 
-    pub fn fg<COLOR>(&mut self, fg: RGB)
+    pub fn fg<COLOR>(&mut self, fg: COLOR)
     where
-        COLOR: Into<RGBA>,
+        COLOR: Into<Srgba>,
     {
         self.fg = fg.into();
     }
 
     pub fn bg<COLOR>(&mut self, bg: COLOR)
     where
-        COLOR: Into<RGBA>,
+        COLOR: Into<Srgba>,
     {
         self.bg = bg.into();
     }
@@ -89,8 +95,8 @@ impl TextBlock {
                 ctx.set(
                     x + self.x,
                     y + self.y,
-                    self.buffer[self.at(x, y)].foreground,
-                    self.buffer[self.at(x, y)].background,
+                    Srgba::from_f32_array(self.buffer[self.at(x, y)].foreground),
+                    Srgba::from_f32_array(self.buffer[self.at(x, y)].background),
                     self.buffer[self.at(x, y)].glyph,
                 );
             }
@@ -103,8 +109,8 @@ impl TextBlock {
                 draw_batch.set(
                     Point::new(x + self.x, y + self.y),
                     ColorPair::new(
-                        self.buffer[self.at(x, y)].foreground,
-                        self.buffer[self.at(x, y)].background,
+                        Srgba::from_f32_array(self.buffer[self.at(x, y)].foreground),
+                        Srgba::from_f32_array(self.buffer[self.at(x, y)].background),
                     ),
                     self.buffer[self.at(x, y)].glyph,
                 );
@@ -118,8 +124,8 @@ impl TextBlock {
                 draw_batch.set(
                     Point::new(x + self.x, y + self.y),
                     ColorPair::new(
-                        self.buffer[self.at(x, y)].foreground,
-                        self.buffer[self.at(x, y)].background,
+                        Srgba::from_f32_array(self.buffer[self.at(x, y)].foreground),
+                        Srgba::from_f32_array(self.buffer[self.at(x, y)].background),
                     ),
                     self.buffer[self.at(x, y)].glyph,
                 );
@@ -135,8 +141,8 @@ impl TextBlock {
                         let idx = self.at(self.cursor.0, self.cursor.1);
                         if idx < self.buffer.len() {
                             self.buffer[idx].glyph = *c;
-                            self.buffer[idx].foreground = self.fg.as_rgba_f32();
-                            self.buffer[idx].background = self.bg.as_rgba_f32();
+                            self.buffer[idx].foreground = self.fg.to_f32_array();
+                            self.buffer[idx].background = self.bg.to_f32_array();
                             self.cursor.0 += 1;
                             if self.cursor.0 >= self.width {
                                 self.cursor.0 = 0;
@@ -156,8 +162,8 @@ impl TextBlock {
                         let idx = self.at(self.cursor.0, self.cursor.1);
                         if idx < self.buffer.len() {
                             self.buffer[idx].glyph = *c;
-                            self.buffer[idx].foreground = self.fg.as_rgba_f32();
-                            self.buffer[idx].background = self.bg.as_rgba_f32();
+                            self.buffer[idx].foreground = self.fg.to_f32_array();
+                            self.buffer[idx].background = self.bg.to_f32_array();
                             self.cursor.0 += 1;
                             if self.cursor.0 >= self.width {
                                 self.cursor.0 = 0;
@@ -178,8 +184,8 @@ impl TextBlock {
                 CommandType::Background { col } => self.bg = *col,
                 CommandType::Reset {} => {
                     self.cursor = (0, 0);
-                    self.fg = RGBA::from_f32(1.0, 1.0, 1.0, 1.0);
-                    self.bg = RGBA::from_f32(0.0, 0.0, 0.0, 1.0);
+                    self.fg = Srgba::rgb(1.0, 1.0, 1.0);
+                    self.bg = Srgba::rgb(0.0, 0.0, 0.0);
                 }
 
                 CommandType::TextWrapper { block: t } => {
@@ -194,8 +200,8 @@ impl TextBlock {
                             let idx = self.at(self.cursor.0, self.cursor.1);
                             if idx < self.buffer.len() {
                                 self.buffer[idx].glyph = c;
-                                self.buffer[idx].foreground = self.fg.as_rgba_f32();
-                                self.buffer[idx].background = self.bg.as_rgba_f32();
+                                self.buffer[idx].foreground = self.fg.to_f32_array();
+                                self.buffer[idx].background = self.bg.to_f32_array();
                                 self.cursor.0 += 1;
                                 if self.cursor.0 >= self.width {
                                     self.cursor.0 = 0;
@@ -217,8 +223,8 @@ pub enum CommandType {
     Text { block: Vec<FontCharType> },
     Centered { block: Vec<FontCharType> },
     NewLine {},
-    Foreground { col: RGBA },
-    Background { col: RGBA },
+    Foreground { col: Srgba },
+    Background { col: Srgba },
     TextWrapper { block: String },
     Reset {},
 }
@@ -254,7 +260,7 @@ impl TextBuilder {
     }
     pub fn fg<COLOR>(&mut self, col: COLOR) -> &mut Self
     where
-        COLOR: Into<RGBA>,
+        COLOR: Into<Srgba>,
     {
         self.commands
             .push(CommandType::Foreground { col: col.into() });
@@ -262,7 +268,7 @@ impl TextBuilder {
     }
     pub fn bg<COLOR>(&mut self, col: COLOR) -> &mut Self
     where
-        COLOR: Into<RGBA>,
+        COLOR: Into<Srgba>,
     {
         self.commands
             .push(CommandType::Background { col: col.into() });

@@ -1,9 +1,10 @@
 use super::{ColoredTextSpans, ConsoleFrontEnd, TextAlign};
 use crate::{
+    color::constants::{BLACK, WHITE},
     prelude::{string_to_cp437, to_cp437},
     BracketContext,
 };
-use bracket_color::prelude::*;
+use bevy::color::Srgba;
 
 pub(crate) fn draw_box(
     terminal: &mut dyn ConsoleFrontEnd,
@@ -11,12 +12,12 @@ pub(crate) fn draw_box(
     sy: i32,
     width: i32,
     height: i32,
-    fg: RGBA,
-    bg: RGBA,
+    fg: Srgba,
+    bg: Srgba,
 ) {
     for y in sy..sy + height {
         for x in sx..sx + width {
-            terminal.set(x, y, WHITE.into(), BLACK.into(), 32);
+            terminal.set(x, y, WHITE, BLACK, 32);
         }
     }
 
@@ -47,8 +48,8 @@ pub(crate) fn print_color(
     mut x: i32,
     y: i32,
     text: &str,
-    foreground: RGBA,
-    background: RGBA,
+    foreground: Srgba,
+    background: Srgba,
 ) {
     let bytes = string_to_cp437(text);
     for glyph in bytes {
@@ -63,8 +64,8 @@ pub(crate) fn draw_hollow_box(
     sy: i32,
     width: i32,
     height: i32,
-    fg: RGBA,
-    bg: RGBA,
+    fg: Srgba,
+    bg: Srgba,
 ) {
     terminal.set(sx, sy, fg, bg, to_cp437('┌'));
     terminal.set(sx + width, sy, fg, bg, to_cp437('┐'));
@@ -86,8 +87,8 @@ pub(crate) fn draw_box_double(
     sy: i32,
     width: i32,
     height: i32,
-    fg: RGBA,
-    bg: RGBA,
+    fg: Srgba,
+    bg: Srgba,
 ) {
     for y in sy..sy + height {
         for x in sx..sx + width {
@@ -116,8 +117,8 @@ pub(crate) fn draw_hollow_box_double(
     sy: i32,
     width: i32,
     height: i32,
-    fg: RGBA,
-    bg: RGBA,
+    fg: Srgba,
+    bg: Srgba,
 ) {
     terminal.set(sx, sy, fg, bg, to_cp437('╔'));
     terminal.set(sx + width, sy, fg, bg, to_cp437('╗'));
@@ -140,14 +141,9 @@ pub(crate) fn printer(
     y: i32,
     output: &str,
     align: TextAlign,
-    background: Option<RGBA>,
+    background: Option<Srgba>,
 ) {
-    let bg = if let Some(bg) = background {
-        bg
-    } else {
-        RGBA::from_u8(0, 0, 0, 255)
-    };
-
+    let bg = background.unwrap_or(BLACK);
     let split_text = ColoredTextSpans::new(context, output);
 
     let mut tx = match align {
@@ -173,8 +169,8 @@ pub(crate) fn draw_bar_horizontal(
     width: i32,
     n: i32,
     max: i32,
-    fg: RGBA,
-    bg: RGBA,
+    fg: Srgba,
+    bg: Srgba,
 ) {
     let percent = n as f32 / max as f32;
     let fill_width = (percent * width as f32) as i32;
@@ -196,8 +192,8 @@ pub(crate) fn draw_bar_vertical(
     height: i32,
     n: i32,
     max: i32,
-    fg: RGBA,
-    bg: RGBA,
+    fg: Srgba,
+    bg: Srgba,
 ) {
     let percent = n as f32 / max as f32;
     let fill_height = height - ((percent * height as f32) as i32);

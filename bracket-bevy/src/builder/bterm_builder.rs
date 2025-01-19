@@ -6,13 +6,8 @@ use crate::{
     load_terminals, update_consoles, RandomNumbers, TerminalBuilderFont, TerminalLayer,
 };
 use bevy::{
-    app::{Plugin, PostUpdate, PreUpdate, Startup},
-    diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin},
-    ecs::{schedule::IntoSystemConfigs, system::Resource},
-    render::view::Msaa,
-    utils::HashMap,
+    app::{Plugin, PostUpdate, PreUpdate, Startup}, color::Srgba, diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin}, ecs::{schedule::IntoSystemConfigs, system::Resource}, render::view::Msaa, utils::HashMap
 };
-use bracket_color::prelude::RGBA;
 use std::collections::HashSet;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -25,7 +20,7 @@ pub enum TerminalScalingMode {
 pub struct BTermBuilder {
     pub(crate) fonts: Vec<TerminalBuilderFont>,
     pub(crate) layers: Vec<TerminalLayer>,
-    pub(crate) palette: HashMap<String, RGBA>,
+    pub(crate) palette: HashMap<String, Srgba>,
     pub(crate) with_ortho_camera: bool,
     pub(crate) with_random_number_generator: bool,
     pub(crate) with_diagnostics: bool,
@@ -130,7 +125,7 @@ impl BTermBuilder {
         self
     }
 
-    pub fn with_named_color<S: ToString, C: Into<RGBA>>(mut self, name: S, color: C) -> Self {
+    pub fn with_named_color<S: ToString, C: Into<Srgba>>(mut self, name: S, color: C) -> Self {
         self.palette.insert(name.to_string(), color.into());
         self
     }
