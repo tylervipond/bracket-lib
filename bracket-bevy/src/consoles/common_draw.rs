@@ -15,23 +15,29 @@ pub(crate) fn draw_box(
     fg: Srgba,
     bg: Srgba,
 ) {
-    for y in sy..sy + height {
-        for x in sx..sx + width {
-            terminal.set(x, y, WHITE, BLACK, 32);
-        }
-    }
+    {
+        let end_x = sx + width - 1;
+        let end_y = sy + height - 1;
 
-    terminal.set(sx, sy, fg, bg, to_cp437('┌'));
-    terminal.set(sx + width, sy, fg, bg, to_cp437('┐'));
-    terminal.set(sx, sy + height, fg, bg, to_cp437('└'));
-    terminal.set(sx + width, sy + height, fg, bg, to_cp437('┘'));
-    for x in sx + 1..sx + width {
-        terminal.set(x, sy, fg, bg, to_cp437('─'));
-        terminal.set(x, sy + height, fg, bg, to_cp437('─'));
-    }
-    for y in sy + 1..sy + height {
-        terminal.set(sx, y, fg, bg, to_cp437('│'));
-        terminal.set(sx + width, y, fg, bg, to_cp437('│'));
+        // fill with black
+        for y in sy + 1..end_y {
+            for x in sx + 1..end_x {
+                terminal.set(x, y, WHITE, BLACK, 32);
+            }
+        }
+
+        terminal.set(sx, sy, fg, bg, to_cp437('┌'));
+        terminal.set(end_x, sy, fg, bg, to_cp437('┐'));
+        terminal.set(sx, end_y, fg, bg, to_cp437('└'));
+        terminal.set(end_x, end_y, fg, bg, to_cp437('┘'));
+        for x in sx + 1..end_x {
+            terminal.set(x, sy, fg, bg, to_cp437('─'));
+            terminal.set(x, end_y, fg, bg, to_cp437('─'));
+        }
+        for y in sy + 1..end_y {
+            terminal.set(sx, y, fg, bg, to_cp437('│'));
+            terminal.set(end_x, y, fg, bg, to_cp437('│'));
+        }
     }
 }
 
@@ -67,17 +73,19 @@ pub(crate) fn draw_hollow_box(
     fg: Srgba,
     bg: Srgba,
 ) {
+    let end_x = sx + width - 1;
+    let end_y = sy + height - 1;
     terminal.set(sx, sy, fg, bg, to_cp437('┌'));
-    terminal.set(sx + width, sy, fg, bg, to_cp437('┐'));
-    terminal.set(sx, sy + height, fg, bg, to_cp437('└'));
-    terminal.set(sx + width, sy + height, fg, bg, to_cp437('┘'));
-    for x in sx + 1..sx + width {
+    terminal.set(end_x, sy, fg, bg, to_cp437('┐'));
+    terminal.set(sx, end_y, fg, bg, to_cp437('└'));
+    terminal.set(end_x, end_y, fg, bg, to_cp437('┘'));
+    for x in sx + 1..end_x {
         terminal.set(x, sy, fg, bg, to_cp437('─'));
-        terminal.set(x, sy + height, fg, bg, to_cp437('─'));
+        terminal.set(x, end_y, fg, bg, to_cp437('─'));
     }
-    for y in sy + 1..sy + height {
+    for y in sy + 1..end_y {
         terminal.set(sx, y, fg, bg, to_cp437('│'));
-        terminal.set(sx + width, y, fg, bg, to_cp437('│'));
+        terminal.set(end_x, y, fg, bg, to_cp437('│'));
     }
 }
 
@@ -90,23 +98,25 @@ pub(crate) fn draw_box_double(
     fg: Srgba,
     bg: Srgba,
 ) {
-    for y in sy..sy + height {
-        for x in sx..sx + width {
+    let end_x = sx + width - 1;
+    let end_y = sy + height - 1;
+    for y in sy + 1..end_y {
+        for x in sx + 1..end_x {
             terminal.set(x, y, WHITE.into(), BLACK.into(), 32);
         }
     }
 
     terminal.set(sx, sy, fg, bg, to_cp437('╔'));
-    terminal.set(sx + width, sy, fg, bg, to_cp437('╗'));
-    terminal.set(sx, sy + height, fg, bg, to_cp437('╚'));
-    terminal.set(sx + width, sy + height, fg, bg, to_cp437('╝'));
-    for x in sx + 1..sx + width {
+    terminal.set(end_x, sy, fg, bg, to_cp437('╗'));
+    terminal.set(sx, end_y, fg, bg, to_cp437('╚'));
+    terminal.set(end_x, end_y, fg, bg, to_cp437('╝'));
+    for x in sx + 1..end_x {
         terminal.set(x, sy, fg, bg, to_cp437('═'));
-        terminal.set(x, sy + height, fg, bg, to_cp437('═'));
+        terminal.set(x, end_y, fg, bg, to_cp437('═'));
     }
-    for y in sy + 1..sy + height {
+    for y in sy + 1..end_y {
         terminal.set(sx, y, fg, bg, to_cp437('║'));
-        terminal.set(sx + width, y, fg, bg, to_cp437('║'));
+        terminal.set(end_x, y, fg, bg, to_cp437('║'));
     }
 }
 
@@ -120,17 +130,19 @@ pub(crate) fn draw_hollow_box_double(
     fg: Srgba,
     bg: Srgba,
 ) {
+    let end_x = sx + width - 1;
+    let end_y = sy + height - 1;
     terminal.set(sx, sy, fg, bg, to_cp437('╔'));
-    terminal.set(sx + width, sy, fg, bg, to_cp437('╗'));
-    terminal.set(sx, sy + height, fg, bg, to_cp437('╚'));
-    terminal.set(sx + width, sy + height, fg, bg, to_cp437('╝'));
-    for x in sx + 1..sx + width {
+    terminal.set(end_x, sy, fg, bg, to_cp437('╗'));
+    terminal.set(sx, end_y, fg, bg, to_cp437('╚'));
+    terminal.set(end_x, end_y, fg, bg, to_cp437('╝'));
+    for x in sx + 1..end_x {
         terminal.set(x, sy, fg, bg, to_cp437('═'));
-        terminal.set(x, sy + height, fg, bg, to_cp437('═'));
+        terminal.set(x, end_y, fg, bg, to_cp437('═'));
     }
-    for y in sy + 1..sy + height {
+    for y in sy + 1..end_y {
         terminal.set(sx, y, fg, bg, to_cp437('║'));
-        terminal.set(sx + width, y, fg, bg, to_cp437('║'));
+        terminal.set(end_x, y, fg, bg, to_cp437('║'));
     }
 }
 
