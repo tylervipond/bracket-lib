@@ -142,10 +142,12 @@ impl SparseConsoleBackend for SparseBackendWithBackground {
 
     fn spawn(&self, commands: &mut Commands, material: Handle<ColorMaterial>, idx: usize) {
         if let Some(mesh_handle) = &self.mesh_handle {
+            let mut transform = Transform::default();
+            transform.translation.z = idx as f32;
             commands
                 .spawn(MaterialMesh2dBundle {
                     mesh: mesh_handle.clone().into(),
-                    transform: Transform::default(),
+                    transform,
                     material,
                     ..default()
                 })
